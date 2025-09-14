@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Administrador</title>
+</head>
+<body>
+    <h1>Bienvenido, {{ user.first_name }} (Administrador)</h1>
+
+    <h2>Crear Candidato</h2>
+    <a href="{% url 'crear_candidato' %}">Ir a crear candidato</a>
+
+    <h2>Tabla de posiciones</h2>
+    <table border="1">
+        <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Puntaje</th>
+        </tr>
+        {% for resultado in resultados %}
+        <tr>
+            <td>{{ resultado.candidato.username }}</td>
+            <td>{{ resultado.candidato.first_name }}</td>
+            <td>{{ resultado.candidato.email }}</td>
+            <td>{{ resultado.puntaje }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
+</body>
+</html>
