@@ -15,11 +15,13 @@ def dashboard(request):
 
 @login_required
 def admin_dashboard(request):
-    if request.user.rol != 'administrador':
-        return redirect('login')
     candidatos = Usuario.objects.filter(rol='candidato')
-    resultados = Resultado.objects.all()
-    return render(request, 'app_principal/admin_dashboard.html', {'candidatos': candidatos, 'resultados': resultados})
+    resultados_dict = {r.candidato_id: r.puntaje for r in Resultado.objects.all()}
+    lista = []
+    for candidato in candidatos:
+        puntaje = resultados_dict.get(candidato.id, 'No presentado')
+        lista.append({'candidato': candidato, 'puntaje': puntaje})
+    return render(request, 'app_principal/admin_dashboard.html', {'resultados': lista})
 
 @login_required
 def crear_candidato(request):
@@ -31,12 +33,15 @@ def crear_candidato(request):
         email = request.POST['email']
         username = request.POST['username']
         password = request.POST['password']
-        
+
+        if Usuario.objects.filter(username=username).exists():
+            return render(request, 'app_principal/crear_candidato.html', {'error': 'El nombre de usuario ya existe.'})
+
         candidato = Usuario.objects.create_user(
             username=username, email=email, password=password,
             rol='candidato', first_name=nombre
         )
-        
+
         send_mail(
             'Inscripción al examen',
             f'Hola {nombre}, tu usuario es {username} y tu contraseña es {password}',
@@ -50,14 +55,14 @@ def crear_candidato(request):
 def presentar_examen(request):
     if request.user.rol != 'candidato':
         return redirect('login')
-    
+
     resultado, created = Resultado.objects.get_or_create(candidato=request.user)
-    
+
     if resultado.presentado:
         return render(request, 'app_principal/mensaje.html', {'puntaje': resultado.puntaje})
-    
+
     preguntas = Pregunta.objects.all()[:10]
-    
+
     if request.method == 'POST':
         puntaje = 0
         for pregunta in preguntas:
@@ -68,5 +73,5 @@ def presentar_examen(request):
         resultado.presentado = True
         resultado.save()
         return render(request, 'app_principal/resultado.html', {'puntaje': puntaje})
-    
+
     return render(request, 'app_principal/examen.html', {'preguntas': preguntas})

@@ -3,15 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Administrador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #0275d8;
+            margin-bottom: 24px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0275d8;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #f1f1f1;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .logout {
+            color: #d9534f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido, {{ user.first_name }} (Administrador)</h1>
+<div class="container">
+    <h1>Bienvenido, {{ user.first_name }} <span style="font-size:0.7em;">(Administrador)</span></h1>
 
-    <h2>Crear Candidato</h2>
-    <a href="{% url 'crear_candidato' %}">Ir a crear candidato</a>
+    <a href="{% url 'crear_candidato' %}" class="btn">Crear Candidato</a>
+    {% csrf_token %}
 
     <h2>Tabla de posiciones</h2>
-    <table border="1">
+    <table>
         <tr>
             <th>Cédula</th>
             <th>Nombre</th>
@@ -28,6 +79,7 @@
         {% endfor %}
     </table>
 
-    <p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
+    <a href="{% url 'logout' %}" class="logout">Cerrar sesión</a>
+</div>
 </body>
 </html>

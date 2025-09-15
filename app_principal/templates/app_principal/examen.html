@@ -1,9 +1,24 @@
-<form method="post">{% csrf_token %}
+<form method="post" style="max-width: 600px; margin: 40px auto; padding: 32px; background: #f9f9f9; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+  {% csrf_token %}
+  <h2 style="text-align:center; color:#0275d8; margin-bottom:32px;">Examen</h2>
   {% for pregunta in preguntas %}
-    <p>{{ forloop.counter }}. {{ pregunta.texto }}</p>
-    <input type="radio" name="pregunta_{{ pregunta.id }}" value="a"> {{ pregunta.opcion_a }}<br>
-    <input type="radio" name="pregunta_{{ pregunta.id }}" value="b"> {{ pregunta.opcion_b }}<br>
-    <input type="radio" name="pregunta_{{ pregunta.id }}" value="c"> {{ pregunta.opcion_c }}<br>
+  <fieldset style="margin-bottom: 28px; padding: 18px; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
+    <legend style="font-weight:bold; color:#333; margin-bottom:12px;">{{ forloop.counter }}. {{ pregunta.texto }}</legend>
+    <div style="margin-bottom:8px;">
+      <label style="display:block; margin-bottom:6px;">
+        <input type="radio" name="pregunta_{{ pregunta.id }}" value="a" required>
+        {{ pregunta.opcion_a }}
+      </label>
+      <label style="display:block; margin-bottom:6px;">
+        <input type="radio" name="pregunta_{{ pregunta.id }}" value="b">
+        {{ pregunta.opcion_b }}
+      </label>
+      <label style="display:block;">
+        <input type="radio" name="pregunta_{{ pregunta.id }}" value="c">
+        {{ pregunta.opcion_c }}
+      </label>
+    </div>
+  </fieldset>
   {% endfor %}
-  <button type="submit">Enviar Examen</button>
+  <button type="submit" style="width:100%; padding:12px; background:#0275d8; color:#fff; border:none; border-radius:5px; font-size:1.1em;">Enviar Examen</button>
 </form>
